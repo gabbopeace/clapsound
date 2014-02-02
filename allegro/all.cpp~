@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <stdio.h>
 #include <allegro.h>
 
 const int scrx = 640;
@@ -34,20 +35,33 @@ int main(int argc, char* argv[]) {
       }
     }
   }
-	std::ifstream ampl("file.txt");
-	ampl.seekg(1);
-	unsigned char n;
+	std::ifstream ampl("prova.raw");
+	ampl.seekg(16);
+	unsigned char n; std::string out; char txth[10]; char txtd[10];char txt[20];
 	ampl>>n;
-
+	unsigned int i = n;
+	std::cout << n << "--->" << i << '\n';
 	ampl.close();
-	const char out = (const char) +n;
+	sprintf(txth,"%x",i);
+	sprintf(txtd,"%d",i);
+	sprintf(txt,"%x---%d",i,i);
+	 
   //set text background color to bright blue
   text_mode(makecol(0, 0, 255));
  
   //prints yellow "Hello World!!!" in middle of screen
-  textout_centre_ex(screen, font, &out, scrx/2,scry/2, makecol(255, 255, 0),-1);
+  textout_centre_ex(screen, font, &txt[0], scrx/2,scry/2, makecol(255, 255, 0),-1);
  
-line(screen, 0,0,480,480,makecol(255, 0, 5));
+for(int x=0;x<=15;x++){
+unsigned char myc; int myi;
+ampl.seekg(x);
+  ampl>>myc;
+  myi = myc;
+putpixel(screen,x,myi,makecol(255, 0, 5));
+std::cout << '\n' << std::hex << myi ;
+}
+
+//line(screen, 0,0,480,480,makecol(255, 0, 5));
 
   //Wait for a key to be pressed
   while (!keypressed()) {}
