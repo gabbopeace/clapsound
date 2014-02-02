@@ -2,8 +2,6 @@
 #include <iostream>
 #include <allegro.h>
 
-using namespace std;
-
 const int scrx = 640;
 const int scry = 480;
  
@@ -36,21 +34,18 @@ int main(int argc, char* argv[]) {
       }
     }
   }
- 
-	ifstream ampl;
-	ampl.open("file.txt");
-	string n;
-
+	std::ifstream ampl("prova.raw");
+	ampl.seekg(1);
+	unsigned char n;
 	ampl>>n;
 
 	ampl.close();
-	string number=(int) n;
+	const char out = (const char) +n;
   //set text background color to bright blue
   text_mode(makecol(0, 0, 255));
  
   //prints yellow "Hello World!!!" in middle of screen
-  textout_centre(screen, font, number.c_str(), scrx/2,
-                 scry/2, makecol(255, 255, 0));
+  textout_centre_ex(screen, font, &out, scrx/2,scry/2, makecol(255, 255, 0),-1);
  
 line(screen, 0,0,480,480,makecol(255, 0, 5));
 
