@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <allegro.h>
 
-const int scrx = 640;
-const int scry = 480;
+const int scrx = 1280;
+const int scry = 960;
  
 int main(int argc, char* argv[]) {
   if (allegro_init() != 0) {
@@ -22,13 +22,13 @@ int main(int argc, char* argv[]) {
  
   //set graphics mode, trying all acceptable depths
   set_color_depth(32);
-  if (set_gfx_mode(GFX_AUTODETECT, scrx, scry,0,0)) {
+  if (set_gfx_mode(GFX_AUTODETECT, 0, 0, scrx, scry)) {
     set_color_depth(24);
-    if (set_gfx_mode(GFX_AUTODETECT, scrx, scry, 0, 0)) {
+    if (set_gfx_mode(GFX_AUTODETECT, 0, 0, scrx, scry)) {
       set_color_depth(16);
-      if (set_gfx_mode(GFX_AUTODETECT, scrx, scry, 0, 0)) {
+      if (set_gfx_mode(GFX_AUTODETECT, 0, 0, scrx, scry)) {
         set_color_depth(15);
-        if (set_gfx_mode(GFX_AUTODETECT, scrx, scry, 0, 0)) {
+        if (set_gfx_mode(GFX_AUTODETECT, 0, 0, scrx, scry)) {
           allegro_message("Video Error: %s.\n", allegro_error);
           return 1;
         }
@@ -53,8 +53,8 @@ int main(int argc, char* argv[]) {
  
 	//should make a graph of the raw file converting its bytes to int
 
-for(int x=0;x<=640;x+=2){
-unsigned char myc[4]; int myi[4];
+for(int x=0;x<=scrx;x+=1){
+unsigned char myc[4]; unsigned int myi[4];
 ampl.seekg(x);
 for(int t=0;t<=4;t++){
   ampl>>myc[t];
@@ -63,15 +63,15 @@ for(int t=0;t<=4;t++){
 
 
 
-line(screen, x,myi[0]+myi[1],x+1,myi[2]+myi[3],makecol(255, 0, 5));
-putpixel(screen,x,myi[0]+myi[1],makecol(255, 0, 5));
-std::cout << '\t' << myi[0]+myi[1] ;
+line(screen, x,myi[0]+myi[1]+scry/2,x+1,myi[1]+myi[2]+scry/2,makecol(255, 0, 5));
+putpixel(screen,x,myi[0]+myi[2]+scry/2,makecol(255, 0, 5));
+std::cout << '\t' << myi[0] ;
 }
-putpixel(screen,1,1,makecol(0, 255, 5));
+
   //Wait for a key to be pressed
   while (!keypressed()) {}
  
-//ampl.close();
+ampl.close();
   return 0;
   //Allegro will automatically deinitalize itself on exit
 }
