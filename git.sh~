@@ -2,7 +2,7 @@
 
 cd `pwd`;
 
-if [ $1 != '' ]
+if [[ "$1" -ne "" ]+
 then
 cd $1;
 fi;
