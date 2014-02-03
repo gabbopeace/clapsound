@@ -17,6 +17,8 @@ int MYI[2]={0,0};
 
 int zoom=1; //distanza tra un campione e l'altro sullo schermo
 if(argv[1]!=NULL)zoom=atoi(argv[1]);
+std::string raw = "reg.raw"; //input raw file
+if(argv[2]!=NULL)raw=argv[2];
 
 std::cout << "1 : "<< argv[0] << "--2 : "<< argv[1] << "\n";
 
@@ -48,7 +50,7 @@ if (allegro_init() != 0) {
       }
     }
   }
-	std::ifstream ampl("reg.raw");
+	std::ifstream ampl(&raw[0]);
 	ampl.seekg(16);
 	unsigned char n; std::string out; char txth[10]; char txtd[10];char txt[20];
 	ampl>>n;
