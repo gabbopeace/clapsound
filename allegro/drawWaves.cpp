@@ -1,13 +1,21 @@
 #include <fstream>
 #include <iostream>
 #include <stdio.h>
+#include <string>
 #include <allegro.h>
 
 const int scrx = 640;
 const int scry = 480;
- 
+ PALETTE pal;
+
+ const int b=2;
+
 int main(int argc, char* argv[]) {
-  if (allegro_init() != 0) {
+
+unsigned char myc[2][b]; int myi[2][b]; char number[5];
+int MYI[2]={0,0};  
+
+if (allegro_init() != 0) {
     allegro_message("Cannot initalize Allegro.\n");
     return 1;
   }
@@ -52,20 +60,29 @@ int main(int argc, char* argv[]) {
   textout_centre_ex(screen, font, &txt[0], scrx/2,scry/2, makecol(255, 255, 0),-1);
  
 	//should make a graph of the raw file converting its bytes to int
+ampl.seekg(0);
+for(int x=0;(x<=scrx)&&(!keypressed());x+=5){
 
-for(int x=0;x<=640;x+=2){
-unsigned char myc[4]; int myi[4];
-ampl.seekg(x);
-for(int t=0;t<=4;t++){
-  ampl>>myc[t];
-  myi[t] = myc[t];
+sprintf(number,"%d",x);
+MYI[1]=0;
+for(int t=0;t<b;t++){
+  ampl>>myc[1][t];
+  myi[1][t] = myc[1][t];
+  MYI[1]+=myi[1][t];
 }
+get_palette(pal);
+save_bitmap("bit.bmp",screen,pal);
 
+line(screen, x,MYI[0],x+5,MYI[1],makecol(255, 0, 5));
+putpixel(screen,x,MYI[0],makecol(255, 0, 5));
+std::cout << '\t' << MYI[0] ;
 
+if( x%30==0 ){
+line(screen, x,0,x,scry,makecol(0,255, 5));
+textout_centre_ex(screen, font, &number[0], x,scry-10, makecol(255, 255, 0),-1);
+			}
 
-line(screen, x,myi[0]+myi[1],x+1,myi[2]+myi[3],makecol(255, 0, 5));
-putpixel(screen,x,myi[0]+myi[1],makecol(255, 0, 5));
-std::cout << '\t' << myi[0]+myi[1] ;
+MYI[0]=MYI[1];
 }
 putpixel(screen,1,1,makecol(0, 255, 5));
   //Wait for a key to be pressed

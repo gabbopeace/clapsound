@@ -50,7 +50,7 @@ int main() {
                               SND_PCM_FORMAT_S16_LE);
 
   /* Two channels (stereo) */
-  snd_pcm_hw_params_set_channels(handle, params, 2);
+  snd_pcm_hw_params_set_channels(handle, params, 1);
 
   /* 44100 bits/second sampling rate (CD quality) */
   //val = 44100;
@@ -59,7 +59,7 @@ int main() {
                                   &val, &dir);
 
   /* Set period size to 32 frames. */
-  frames = 32;
+  frames = 16;
   snd_pcm_hw_params_set_period_size_near(handle, 
                               params, &frames, &dir);
 
