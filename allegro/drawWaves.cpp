@@ -9,12 +9,16 @@ const int scry = 480;
  PALETTE pal;
 
  const int b=2; //numero di byte per frame
- const int zoom=5 //distanza tra un campione e l'altro sullo schermo
 
 int main(int argc, char* argv[]) {
 
 unsigned char myc[2][b]; int myi[2][b]; char number[5];
 int MYI[2]={0,0};  
+
+int zoom=1; //distanza tra un campione e l'altro sullo schermo
+if(argv[1]!=NULL)zoom=atoi(argv[1]);
+
+std::cout << "1 : "<< argv[0] << "--2 : "<< argv[1] << "\n";
 
 if (allegro_init() != 0) {
     allegro_message("Cannot initalize Allegro.\n");
@@ -49,7 +53,7 @@ if (allegro_init() != 0) {
 	unsigned char n; std::string out; char txth[10]; char txtd[10];char txt[20];
 	ampl>>n;
 	unsigned int i = n;
-	std::cout << n << "--->" << i << '\n';
+	std::cout << n << "--->" << i<< "   zoom: "<< zoom << '\n';
 	sprintf(txth,"%x",i);
 	sprintf(txtd,"%d",i);
 	sprintf(txt,"%x---%d",i,i);
@@ -64,7 +68,7 @@ if (allegro_init() != 0) {
 ampl.seekg(0);
 for(int x=0;(x<=scrx)&&(!keypressed());x+=zoom){
 
-sprintf(number,"%d",x);
+sprintf(number,"%d",x/zoom);
 
 MYI[1]=0;
 //memorize the next frame value
@@ -83,7 +87,7 @@ putpixel(screen,x,MYI[0],makecol(255, 0, 5));
 std::cout << '\t' << MYI[0] ;
 
 //make a line every 30 frames
-if( x%(30*zoom)==0 ){
+if( x%30==0 ){
 line(screen, x,0,x,scry,makecol(0,255, 5));
 textout_centre_ex(screen, font, &number[0], x,scry-10, makecol(255, 255, 0),-1);
 			}
