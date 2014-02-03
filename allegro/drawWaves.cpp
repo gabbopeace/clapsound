@@ -8,7 +8,8 @@ const int scrx = 640;
 const int scry = 480;
  PALETTE pal;
 
- const int b=2;
+ const int b=2; //numero di byte per frame
+ const int zoom=5 //distanza tra un campione e l'altro sullo schermo
 
 int main(int argc, char* argv[]) {
 
@@ -61,23 +62,28 @@ if (allegro_init() != 0) {
  
 	//should make a graph of the raw file converting its bytes to int
 ampl.seekg(0);
-for(int x=0;(x<=scrx)&&(!keypressed());x+=5){
+for(int x=0;(x<=scrx)&&(!keypressed());x+=zoom){
 
 sprintf(number,"%d",x);
+
 MYI[1]=0;
+//memorize the next frame value
 for(int t=0;t<b;t++){
   ampl>>myc[1][t];
   myi[1][t] = myc[1][t];
   MYI[1]+=myi[1][t];
 }
+
+//memorize screen on bitmap "bit.bmp"
 get_palette(pal);
 save_bitmap("bit.bmp",screen,pal);
 
-line(screen, x,MYI[0],x+5,MYI[1],makecol(255, 0, 5));
+line(screen, x,MYI[0],x+zoom,MYI[1],makecol(255, 0, 5));
 putpixel(screen,x,MYI[0],makecol(255, 0, 5));
 std::cout << '\t' << MYI[0] ;
 
-if( x%30==0 ){
+//make a line every 30 frames
+if( x%(30*zoom)==0 ){
 line(screen, x,0,x,scry,makecol(0,255, 5));
 textout_centre_ex(screen, font, &number[0], x,scry-10, makecol(255, 255, 0),-1);
 			}
