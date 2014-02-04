@@ -4,8 +4,8 @@
 #include <string>
 #include <allegro.h>
 
-const int scrx = 640;
-const int scry = 480;
+const int scrx = 640*2;
+const int scry = 480*2;
  PALETTE pal;
 
 
@@ -19,7 +19,7 @@ int b=1; //numero di byte per frame
 if(argv[3]!=NULL)b=atoi(argv[3]);
 int vc=1; //Vertical zoom
 if(argv[4]!=NULL)vc=atoi(argv[4]);
-char myc[2][b]; int myi[2][b]; char number[5];
+unsigned char myc[2][b-1]; char msbc; uint8_t myi[2][b-1]; int8_t msb; int msbi; char number[5];
 int MYI[2]={0,0}; 
 
 std::cout << "1 : "<< argv[0] << "--2 : "<< argv[1] << "\n";
@@ -39,7 +39,7 @@ if (allegro_init() != 0) {
  
   //set graphics mode, trying all acceptable depths
   set_color_depth(32);
-  if (set_gfx_mode(GFX_AUTODETECT, scrx, scry,0,0)) {
+  if (set_gfx_mode(GFX_AUTODETECT, scrx, scry,0, 0)) {
     set_color_depth(24);
     if (set_gfx_mode(GFX_AUTODETECT, scrx, scry, 0, 0)) {
       set_color_depth(16);
@@ -53,6 +53,7 @@ if (allegro_init() != 0) {
     }
   }
 	std::ifstream ampl(&raw[0]);
+	FILE *stream=fopen(&raw[0],"r");
 	ampl.seekg(16);
 	unsigned char n; std::string out; char txth[10]; char txtd[10];char txt[20];
 	ampl>>n;
@@ -71,20 +72,30 @@ if (allegro_init() != 0) {
 	//should make a graph of the raw file converting its bytes to int
 ampl.seekg(0);
 for(int x=0;(x<=scrx)&&(!keypressed());x+=zoom){
-
 sprintf(number,"%d",x/zoom);
-
 MYI[0]=MYI[1];
+MYI[1]=0;
 //MYI[1]=0;
 //memorize the next frame value
-for(int t=0;t<b;t++){
-  ampl>>myc[1][t];
-  myi[1][t] = myc[1][t];
+for(int t=0;t<b-1;t++){
+ // myi[1][t]=fgetc(stream);
+  ampl>>myi[1][t];
+
+  myi[1][t]*=1;
   MYI[1]+=myi[1][t];
 }
-line(screen, x,MYI[0]/vc,x+zoom,MYI[1]/vc,makecol(255, 0, 5));
-putpixel(screen,x,MYI[0],makecol(255, 0, 5));
-std::cout << '\t' << MYI[0] << "(" << MYI[0]/vc << ")" ;
+ // msbi=fgetc(stream);
+   ampl>>msb;
+  msbi=msb*256;
+MYI[0]=MYI[1];
+if( msb<0 )
+  MYI[1]*=-1;
+  //MYI[0];
+  MYI[1]+=msbi;
+
+//line(screen, x,MYI[0]/vc,x+zoom,MYI[1]/vc,makecol(255, 0, 5));
+putpixel(screen,x,MYI[1]/vc+scry/2,makecol(100,255, 105));
+std::cout <<"msb:" << (int) msb << "\t" <<"msbi:" << (int) msbi << "\t" <<"myi:" << (int) myi[1][0] << "\t" << "MYI[1]:" << MYI[1] << "\t" << "MYI[0]:" << MYI[0] << "\t" << "temp:" << temp << "\n";
 
 //make a line every 30 frames
 if( x%30==0 ){
