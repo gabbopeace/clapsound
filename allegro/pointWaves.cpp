@@ -87,15 +87,14 @@ for(int t=0;t<b-1;t++){
  // msbi=fgetc(stream);
    ampl>>msb;
   msbi=msb*256;
-MYI[0]=MYI[1];
 if( msb<0 )
   MYI[1]*=-1;
   //MYI[0];
   MYI[1]+=msbi;
 
-//line(screen, x,MYI[0]/vc,x+zoom,MYI[1]/vc,makecol(255, 0, 5));
+line(screen, x,MYI[0]/vc+scry/2,x+zoom,MYI[1]/vc+scry/2,makecol(255, 0, 5));
 putpixel(screen,x,MYI[1]/vc+scry/2,makecol(100,255, 105));
-std::cout <<"msb:" << (int) msb << "\t" <<"msbi:" << (int) msbi << "\t" <<"myi:" << (int) myi[1][0] << "\t" << "MYI[1]:" << MYI[1] << "\t" << "MYI[0]:" << MYI[0] << "\t" << "temp:" << temp << "\n";
+std::cout <<"msb:" << (int) msb << "\t" <<"msbi:" << (int) msbi << "\t" <<"myi:" << (int) myi[1][0] << "\t" << "MYI[1]:" << MYI[1] << "\t" << "MYI[0]:" << MYI[0] << "\n";
 
 //make a line every 30 frames
 if( x%30==0 ){
